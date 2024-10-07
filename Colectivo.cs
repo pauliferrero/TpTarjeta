@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace Tp2AAT
 {
@@ -18,3 +17,4 @@ namespace Tp2AAT
         }
     }
 }
+

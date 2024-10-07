@@ -1,13 +1,13 @@
 using System;
-using System.Collections.Generic;
 
 namespace Tp2AAT
 {
     public class Tarjeta
     {
-        private decimal saldo;
-        private static readonly decimal TARIFA = 940m;
-        private static readonly decimal LIMITE_SALDO = 9900m;
+        protected decimal saldo;
+        protected static readonly decimal TARIFA = 940m;
+        protected static readonly decimal LIMITE_SALDO = 9900m;
+        protected static readonly decimal LIMITE_NEGATIVO = -480m;
 
         public Tarjeta(decimal saldoInicial)
         {
@@ -23,22 +23,42 @@ namespace Tp2AAT
             return Array.Exists(montosAceptados, m => m == monto) || monto <= LIMITE_SALDO;
         }
 
-        public bool TieneSaldoSuficiente()
+        public virtual bool TieneSaldoSuficiente()
         {
-            return saldo >= TARIFA;
+            return saldo >= TARIFA || saldo - TARIFA >= LIMITE_NEGATIVO;
         }
 
-        public void DebitarSaldo()
+        public virtual void DebitarSaldo()
         {
             if (!TieneSaldoSuficiente())
-                throw new InvalidOperationException("Saldo insuficiente para realizar el pago.");
+                throw new InvalidOperationException("Saldo insuficiente.");
 
             saldo -= TARIFA;
         }
 
-        public decimal ObtenerSaldo()
+        public decimal ObtenerSaldo() => saldo;
+
+        public void RecargarSaldo(decimal monto)
         {
-            return saldo;
+            if (monto <= 0)
+                throw new ArgumentException("El monto de recarga debe ser positivo.");
+
+            if (saldo < 0)
+            {
+                decimal deuda = Math.Abs(saldo);
+                if (monto >= deuda)
+                {
+                    monto -= deuda;
+                    saldo = 0;
+                }
+                else
+                {
+                    saldo += monto;
+                    monto = 0;
+                }
+            }
+
+            saldo += monto;
         }
     }
 }
