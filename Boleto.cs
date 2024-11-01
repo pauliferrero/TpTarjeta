@@ -1,6 +1,6 @@
 using System;
 
-namespace Tp2AAT
+namespace TpTarjeta
 {
     public class Boleto
     {
