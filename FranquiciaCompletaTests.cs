@@ -36,7 +36,7 @@ namespace TpTarjeta.Tests
         {
             // Arrange
             var tiempo = new Tiempo(10, 0);
-            var tarjeta = new FranquiciaCompleta(1000, tiempo); // Suficiente saldo para cubrir tarifas
+            var tarjeta = new FranquiciaCompleta(1200, tiempo); // Suficiente saldo para cubrir tarifas
             var colectivo = new Colectivo();
 
             // Act
@@ -50,7 +50,7 @@ namespace TpTarjeta.Tests
             Assert.DoesNotThrow(() => colectivo.PagarCon(tarjeta, tiempo), "Se esperaba que no se lanzara una excepción al intentar realizar un tercer viaje.");
 
             // Verifica que el saldo se haya debitado correctamente después del tercer viaje
-            Assert.That(tarjeta.ObtenerSaldo(), Is.EqualTo(1000 - 940), "El saldo no se debió debitar correctamente después del tercer viaje.");
+            Assert.That(tarjeta.ObtenerSaldo(), Is.EqualTo(1200 - 1200), "El saldo no se debió debitar correctamente después del tercer viaje.");
         }
 
         [Test]

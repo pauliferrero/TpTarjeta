@@ -16,14 +16,14 @@ namespace TpTarjeta.Tests
         {
             // Arrange
             var tiempoInicial = new Tiempo(10, 0); // Tiempo inicial para el viaje
-            var tarjeta = new MedioBoleto(1000, tiempoInicial); // Tarjeta medio boleto con saldo suficiente
+            var tarjeta = new MedioBoleto(1200, tiempoInicial); // Tarjeta medio boleto con saldo suficiente
 
             // Act
             tarjeta.DebitarSaldo(tiempoInicial); // Debitamos el monto de medio boleto
             var ultimoPagoMedioBoleto = tarjeta.ObtenerUltimoPago(); // Obtenemos el último pago
 
             // Assert
-            Assert.That(ultimoPagoMedioBoleto, Is.EqualTo(470m), "El monto del medio boleto debería ser 470.");
+            Assert.That(ultimoPagoMedioBoleto, Is.EqualTo(600m), "El monto del medio boleto debería ser 470.");
             Console.WriteLine("El monto del medio boleto es correctamente 470.");
         }
 
@@ -45,7 +45,7 @@ namespace TpTarjeta.Tests
         public void PagoConMedioBoleto_MasDeCuatroViajes_LanzaExcepcion()
         {
             var tiempo = new Tiempo(10, 0); // Tiempo inicial para el primer viaje
-            var tarjeta = new MedioBoleto(2000, tiempo); // Tarjeta medio boleto
+            var tarjeta = new MedioBoleto(3000, tiempo); // Tarjeta medio boleto
 
             tarjeta.DebitarSaldo(new Tiempo(tiempo.ObtenerHoras(), tiempo.ObtenerMinutos())); // 1er viaje
             tiempo.SumarMinutos(5); // 5 minutos después
