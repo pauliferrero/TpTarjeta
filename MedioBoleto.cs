@@ -16,6 +16,8 @@ namespace TpTarjeta
 
         public override void DebitarSaldo(Tiempo tiempoActual)
         {
+            if (!EsHorarioValido(tiempoActual))
+                throw new InvalidOperationException("No se puede realizar el viaje fuera del horario permitido.");
 
             if (!TieneSaldoSuficiente())
                 throw new InvalidOperationException("Saldo insuficiente.");
@@ -26,7 +28,6 @@ namespace TpTarjeta
                 ultimoViaje = tiempoActual; // Registra el tiempo del primer viaje
                 ultimoPago = TARIFA_MEDIO_BOLETO; // Registra el pago
                 saldo -= TARIFA_MEDIO_BOLETO; // Debita el saldo
-  
                 return; // Termina el método aquí
             }
 
@@ -41,6 +42,21 @@ namespace TpTarjeta
             saldo -= TARIFA_MEDIO_BOLETO; // Se debita el saldo de la tarjeta
             ultimoViaje = tiempoActual; // Actualiza el último viaje al tiempo actual
         }
+
+        private bool EsHorarioValido(Tiempo tiempo)
+        {
+            int hora = tiempo.ObtenerHoras();
+            int minutos = tiempo.ObtenerMinutos();
+
+            // Se acepta desde las 6:00 hasta las 22:00 (22:00 incluido)
+            if (hora < 6 || (hora == 22 && minutos > 0))
+            {
+                return false;
+            }
+
+            return true; // Dentro de horario permitido
+        }
+
 
         // Método para obtener el último pago realizado
         public new decimal ObtenerUltimoPago() => ultimoPago;

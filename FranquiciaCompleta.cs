@@ -25,6 +25,11 @@ namespace TpTarjeta
 
         public override void DebitarSaldo(Tiempo tiempo)
         {
+            if (!EsHorarioValido(tiempo))
+            {
+                throw new InvalidOperationException("No se puede realizar el viaje fuera de la franja horaria permitida.");
+            }
+
             if (viajesRealizadosHoy >= MaxViajesGratuitosPorDia)
             {
                 // Si se han superado los viajes gratuitos, se debe debitar el saldo como una tarjeta normal
@@ -32,10 +37,28 @@ namespace TpTarjeta
             }
             else
             {
-                // Si no se han superado los viajes gratuitos, no se debita nada
+                // Incrementar el contador de viajes gratuitos
                 viajesRealizadosHoy++;
             }
+
+            // Actualizamos el tiempo del último viaje
+            tiempoUltimoViaje = tiempo;
         }
+
+        private bool EsHorarioValido(Tiempo tiempo)
+        {
+            int hora = tiempo.ObtenerHoras();
+            int minutos = tiempo.ObtenerMinutos();
+
+            // Se acepta desde las 6:00 hasta las 22:00 (22:00 incluido)
+            if (hora < 6 || (hora == 22 && minutos > 0))
+            {
+                return false;
+            }
+
+            return true; // Dentro de horario permitido
+        }
+
 
         // Método para realizar un viaje
         public void RealizarViaje(Tiempo tiempo)

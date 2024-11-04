@@ -63,7 +63,16 @@ namespace TpTarjeta.Tests
             Console.WriteLine("No se puede realizar más de cuatro viajes en un día con la tarjeta medio boleto.");
         }
 
+        [Test]
+        public void TestMedioBoleto_ViajeFueraDeHorario()
+        {
+            // Arrange
+            var tarjeta = new MedioBoleto(1000m, new Tiempo(10, 0)); // Inicializa a las 10:00
 
+            // Act & Assert
+            Assert.Throws<InvalidOperationException>(() => tarjeta.DebitarSaldo(new Tiempo(5, 59))); // 23:00
+            Assert.Throws<InvalidOperationException>(() => tarjeta.DebitarSaldo(new Tiempo(22, 30))); // 22:30
+        }
 
 
     }

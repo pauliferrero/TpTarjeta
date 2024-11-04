@@ -86,7 +86,16 @@ namespace TpTarjeta.Tests
                 "Se esperaba una excepción al intentar realizar un tercer viaje gratuito.");
         }
 
+        [Test]
+        public void TestFranquiciaCompleta_ViajeFueraDeHorario()
+        {
+            // Arrange
+            var tarjeta = new FranquiciaCompleta(1000m, new Tiempo(10, 0)); // Inicializa a las 10:00
 
+            // Act & Assert
+            Assert.Throws<InvalidOperationException>(() => tarjeta.DebitarSaldo(new Tiempo(5, 0))); // 05:00
+            Assert.Throws<InvalidOperationException>(() => tarjeta.DebitarSaldo(new Tiempo(22, 30))); // 22:30
+        }
 
 
     }
