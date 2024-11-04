@@ -53,6 +53,19 @@ namespace TpTarjeta
             horas %= 24; // Asegura que las horas estén entre 0 y 23
         }
 
+        public void Sumar(Tiempo otroTiempo)
+        {
+            this.horas += otroTiempo.horas;
+            this.minutos += otroTiempo.minutos;
+
+            // Manejo del desbordamiento de minutos
+            if (this.minutos >= 60)
+            {
+                this.horas += this.minutos / 60;
+                this.minutos %= 60;
+            }
+        }
+
         // Método para sumar horas (sin afectar los minutos)
         public void SumarHoras(int cantidadHoras)
         {

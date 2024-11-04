@@ -6,7 +6,7 @@ namespace TpTarjeta
     {
         private Tiempo? ultimoViaje; // Guarda el tiempo del último viaje
         private decimal ultimoPago;
-        private const decimal TARIFA_MEDIO_BOLETO = 470m; // Tarifa específica para medio boleto
+        private const decimal TARIFA_MEDIO_BOLETO = 600m; // Tarifa específica para medio boleto
 
         // Constructor
         public MedioBoleto(decimal saldoInicial, Tiempo tiempoInicial) : base(saldoInicial)
