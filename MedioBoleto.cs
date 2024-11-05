@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 using System;
 
 namespace TpTarjeta
@@ -9,16 +8,18 @@ namespace TpTarjeta
         new private decimal ultimoPago;
         private const decimal tarifaMedioBoleto = 600m; 
         private int contadorViajes;
+        private bool saldoFueNegativo;
 
         public MedioBoleto(decimal saldoInicial, Tiempo tiempoInicial) : base(saldoInicial)
         {
             ultimoViaje = null;
             contadorViajes = 0;
+            saldoFueNegativo = saldo < 0;
         }
 
-        public override void DebitarSaldo(Tiempo tiempoActual)
+        public override void DebitarSaldo(Tiempo tiempoActual, Fecha fecha)
         {
-            if (!EsHorarioValido(tiempoActual))
+            if (!EsHorarioValido(tiempoActual, fecha))
             {
                 throw new InvalidOperationException("No se puede realizar el viaje fuera del horario permitido.");
             }
@@ -41,22 +42,46 @@ namespace TpTarjeta
             saldo -= tarifaMedioBoleto;
             ultimoViaje = tiempoActual;
             ultimoPago = tarifaMedioBoleto;
+            UpdateSaldoNegativoState();
             contadorViajes++;
-
-            Console.WriteLine($"Pago registrado. Saldo restante: {saldo}, total de viajes: {contadorViajes}, ultimo pago: {ultimoPago}");
+            
         }
 
-        public new decimal ObtenerUltimoPago()
+        public override decimal ObtenerUltimoPago() => ultimoPago;
+
+        public override void UpdateSaldoNegativoState()
         {
-            Console.WriteLine($"Último Pago: {ultimoPago}");
-            return ultimoPago;
+            if (saldo >= 0)
+            {
+                if (saldoFueNegativo)
+                {
+                    saldoFueNegativo = false;
+                }
+            }
+            else
+            {
+                saldoFueNegativo = true;
+            }
         }
 
-        private bool EsHorarioValido(Tiempo tiempo)
+        public override bool SaldoNegativoCancelado()
+        {
+            return saldo >= 0 && saldoFueNegativo;
+        }
+
+        private static bool EsHorarioValido(Tiempo tiempo, Fecha fecha)
         {
             int hora = tiempo.ObtenerHoras();
             int minutos = tiempo.ObtenerMinutos();
+            var dia = fecha.Dia;
 
+            // Verificar si es sábado o domingo
+            if (dia == DiaDeLaSemana.Sabado || dia == DiaDeLaSemana.Domingo)
+            {
+                return false; // No se permite viajar los fines de semana
+            }
+
+            // Verificar si la hora está dentro del rango permitido (lunes a viernes de 6 a 22 hs)
             if (hora < 6 || (hora == 22 && minutos > 0))
             {
                 return false;
@@ -64,45 +89,6 @@ namespace TpTarjeta
 
             return true;
         }
-        
+
     }
 }
-=======
-using System;
-
-namespace Tp2AAT
-{
-    public class MedioBoleto : Tarjeta
-    {
-        private static readonly decimal TARIFA_MEDIO = TARIFA / 2;
-        private static readonly TimeSpan TIEMPO_MINIMO_ENTRE_VIAJES = TimeSpan.FromSeconds(5); // Usamos la funcion TimeSpan.FromSeconds en vez de FromMinutes para no alargar la ejecución
-        private DateTime ultimoViaje;  // Almacena la fecha y hora del último viaje.
-
-        public MedioBoleto(decimal saldoInicial) : base(saldoInicial)
-        {
-            ultimoViaje = DateTime.MinValue;  // Inicializamos con una fecha por defecto muy antigua.
-        }
-
-        public override bool TieneSaldoSuficiente()
-        {
-            return saldo >= TARIFA_MEDIO || saldo - TARIFA_MEDIO >= LIMITE_NEGATIVO;
-        }
-
-        public override void DebitarSaldo()
-        {
-            // Verificar si han pasado 5 minutos desde el último viaje.
-            if (DateTime.Now - ultimoViaje < TIEMPO_MINIMO_ENTRE_VIAJES)
-            {
-                throw new InvalidOperationException("Debe esperar 5 minutos antes de realizar otro viaje con medio boleto.");
-            }
-
-            if (!TieneSaldoSuficiente())
-                throw new InvalidOperationException("Saldo insuficiente para realizar el pago con medio boleto.");
-
-            // Actualizamos el saldo y la fecha del último viaje.
-            saldo -= TARIFA_MEDIO;
-            ultimoViaje = DateTime.Now;  // Registramos el momento en que se realiza el viaje.
-        }
-    }
-}
->>>>>>> limitacion_MB

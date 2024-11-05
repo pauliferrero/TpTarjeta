@@ -6,7 +6,7 @@ namespace TpTarjeta
     {
         public const decimal tarifa = 1200;
         public virtual decimal Tarifa => tarifa;
-        public virtual Boleto PagarCon(Tarjeta tarjeta, Tiempo tiempoActual)
+        public virtual Boleto PagarCon(Tarjeta tarjeta, Tiempo tiempoActual, Fecha fechaActual)
         {
             if (tarjeta == null)
                 throw new ArgumentNullException(nameof(tarjeta));
@@ -14,9 +14,10 @@ namespace TpTarjeta
             if (!tarjeta.TieneSaldoSuficiente(tarifa))
                 throw new InvalidOperationException("Saldo insuficiente en la tarjeta.");
 
-            tarjeta.DebitarSaldo(tiempoActual);
+            tarjeta.DebitarSaldo(tiempoActual, fechaActual);
 
             var boleto = new Boleto(
+                fecha: fechaActual,
                 tiempo: tiempoActual,
                 tipoTarjeta: tarjeta.GetType().Name,
                 lineaColectivo: "102 144",

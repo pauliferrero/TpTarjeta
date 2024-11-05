@@ -10,7 +10,7 @@ namespace TpTarjeta
     {
         public const decimal tarifaInterurbana = 2500;
         public override decimal Tarifa => tarifaInterurbana;
-        public override Boleto PagarCon(Tarjeta tarjeta, Tiempo tiempoActual)
+        public override Boleto PagarCon(Tarjeta tarjeta, Tiempo tiempoActual, Fecha fechaActual)
         {
             if (tarjeta == null)
                 throw new ArgumentNullException(nameof(tarjeta));
@@ -18,11 +18,10 @@ namespace TpTarjeta
             if (!tarjeta.TieneSaldoSuficiente(Tarifa))
                 throw new InvalidOperationException("Saldo insuficiente en la tarjeta.");
 
-            Console.WriteLine($"Antes de debitar: Saldo: {tarjeta.ObtenerSaldo()}, Último Pago: {tarjeta.ObtenerUltimoPago()}");
-            tarjeta.DebitarSaldo(tiempoActual);
-            Console.WriteLine($"Después de debitar: Saldo: {tarjeta.ObtenerSaldo()}, Último Pago: {tarjeta.ObtenerUltimoPago()}");
+            tarjeta.DebitarSaldo(tiempoActual, fechaActual);
 
             var boleto = new Boleto(
+                fecha: fechaActual,
                 tiempo: tiempoActual,
                 tipoTarjeta: tarjeta.GetType().Name,
                 lineaColectivo: "Expresso",
