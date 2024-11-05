@@ -21,8 +21,8 @@ namespace TpTarjeta.Tests
             tarjeta.DebitarSaldo(tiempo); 
             var ultimoPagoMedioBoleto = tarjeta.ObtenerUltimoPago();
 
-            Assert.That(ultimoPagoMedioBoleto, Is.EqualTo(600m), "El monto del medio boleto debería ser 470.");
-            Console.WriteLine("El monto del medio boleto es correctamente 470.");
+            Assert.That(ultimoPagoMedioBoleto, Is.EqualTo(600m), "El monto del medio boleto debería ser 600.");
+            Console.WriteLine("El monto del medio boleto es correctamente 600.");
         }
 
         [Test]

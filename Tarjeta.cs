@@ -37,6 +37,7 @@ namespace TpTarjeta
         public virtual bool TieneSaldoSuficiente(decimal tarifa)
         {
             decimal tarifaAPagar = tarifa;
+
             return saldo >= tarifaAPagar || saldo - tarifaAPagar >= LIMITE_NEGATIVO;
         }
 

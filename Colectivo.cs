@@ -6,7 +6,7 @@ namespace TpTarjeta
     {
         public const decimal tarifa = 1200;
         public virtual decimal Tarifa => tarifa;
-        public Boleto PagarCon(Tarjeta tarjeta, Tiempo tiempoActual)
+        public virtual Boleto PagarCon(Tarjeta tarjeta, Tiempo tiempoActual)
         {
             if (tarjeta == null)
                 throw new ArgumentNullException(nameof(tarjeta));
@@ -17,6 +17,7 @@ namespace TpTarjeta
             tarjeta.DebitarSaldo(tiempoActual);
 
             var boleto = new Boleto(
+                tiempo: tiempoActual,
                 tipoTarjeta: tarjeta.GetType().Name,
                 lineaColectivo: "102 144",
                 totalAbonado: tarjeta.ObtenerUltimoPago(),

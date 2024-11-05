@@ -3,12 +3,12 @@ using System;
 namespace TpTarjeta
 {
     public class FranquiciaCompleta : Tarjeta
-    {
-        private const int MaxViajesGratuitosPorDia = 2; 
-        private int viajesRealizadosHoy; 
+    { 
         private Tiempo tiempoUltimoViaje; 
         private Tiempo tiempoActual; 
         public const decimal tarifaFC = 0;
+        private const int MaxViajesGratuitosPorDia = 2;
+        private int viajesRealizadosHoy;
 
         public FranquiciaCompleta(decimal saldoInicial, Tiempo tiempoInicial) : base(saldoInicial)
         {
@@ -30,16 +30,27 @@ namespace TpTarjeta
                 throw new InvalidOperationException("No se puede realizar el viaje fuera de la franja horaria permitida.");
             }
 
+            if (EsNuevoDia())
+            {
+                viajesRealizadosHoy = 0;
+            }
+
             if (viajesRealizadosHoy >= MaxViajesGratuitosPorDia)
             {
+                if (!TieneSaldoSuficiente(tarifaFC))
+                {
+                    throw new InvalidOperationException("No tienes saldo suficiente para realizar el viaje.");
+                }
+
                 base.DebitarSaldo(tiempo);
             }
             else
             {
-                viajesRealizadosHoy++;
+                viajesRealizadosHoy++; 
             }
 
             tiempoUltimoViaje = tiempo;
+            tiempoActual = tiempo; 
         }
 
         private bool EsHorarioValido(Tiempo tiempo)
@@ -54,33 +65,6 @@ namespace TpTarjeta
 
             return true; 
         }
-
-        public void RealizarViaje(Tiempo tiempo)
-        {
-            tiempoActual = tiempo; 
-
-            if (EsNuevoDia())
-            {
-                viajesRealizadosHoy = 0; 
-            }
-
-            if (viajesRealizadosHoy >= MaxViajesGratuitosPorDia)
-            {
-                if (!TieneSaldoSuficiente(tarifaFC))
-                {
-                    throw new InvalidOperationException("No tienes saldo suficiente para realizar el viaje.");
-                }
-
-                DebitarSaldo(tiempo);
-            }
-            else
-            {
-                viajesRealizadosHoy++;
-            }
-
-            tiempoUltimoViaje = tiempoActual;
-        }
-
 
         private bool EsNuevoDia()
         {

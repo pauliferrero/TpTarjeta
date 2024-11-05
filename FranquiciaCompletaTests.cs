@@ -41,14 +41,13 @@ namespace TpTarjeta.Tests
         [Test]
         public void NoMasDeDosViajesGratuitosPorDia()
         {
-            var tarjeta = new FranquiciaCompleta(10, tiempo); // Suficiente saldo para cubrir un viaje
-
-            tarjeta.RealizarViaje(tiempo);
+            var tarjeta = new FranquiciaCompleta(10, tiempo); 
+            tarjeta.DebitarSaldo(tiempo);
             tiempo.SumarMinutos(5); 
-            tarjeta.RealizarViaje(tiempo);
+            tarjeta.DebitarSaldo(tiempo);
             tiempo.SumarMinutos(5); 
 
-            Assert.Throws<InvalidOperationException>(() => tarjeta.RealizarViaje(tiempo), "Se esperaba una excepción al intentar realizar un tercer viaje gratuito.");
+            Assert.Throws<InvalidOperationException>(() => tarjeta.DebitarSaldo(tiempo), "Se esperaba una excepción al intentar realizar un tercer viaje gratuito.");
         }
 
         [Test]

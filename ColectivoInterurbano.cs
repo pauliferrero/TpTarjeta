@@ -10,7 +10,7 @@ namespace TpTarjeta
     {
         public const decimal tarifaInterurbana = 2500;
         public override decimal Tarifa => tarifaInterurbana;
-        public new Boleto PagarCon(Tarjeta tarjeta, Tiempo tiempoActual)
+        public override Boleto PagarCon(Tarjeta tarjeta, Tiempo tiempoActual)
         {
             if (tarjeta == null)
                 throw new ArgumentNullException(nameof(tarjeta));
@@ -22,20 +22,16 @@ namespace TpTarjeta
             tarjeta.DebitarSaldo(tiempoActual);
             Console.WriteLine($"Después de debitar: Saldo: {tarjeta.ObtenerSaldo()}, Último Pago: {tarjeta.ObtenerUltimoPago()}");
 
-            // Obtén el valor de ultimoPago directamente después de DebitarSaldo
-            decimal totalAbonado = tarjeta.ultimoPago;  // Accede directamente a la variable
-            Console.WriteLine($"Total Abonado (directo): {totalAbonado}");
-
             var boleto = new Boleto(
+                tiempo: tiempoActual,
                 tipoTarjeta: tarjeta.GetType().Name,
                 lineaColectivo: "Expresso",
-                totalAbonado: totalAbonado,
+                totalAbonado: tarjeta.ObtenerUltimoPago(),
                 saldoRestante: tarjeta.ObtenerSaldo(),
                 idTarjeta: tarjeta.ObtenerID(),
                 cancelacionSaldoNegativo: tarjeta.SaldoNegativoCancelado()
             );
 
-            // Mostrar el boleto por pantalla
             boleto.MostrarBoleto();
 
             return boleto;
