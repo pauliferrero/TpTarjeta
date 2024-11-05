@@ -7,9 +7,13 @@ namespace TpTarjeta
         public static void Main()
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
         
 =======
             // Crea instancias de las tarjetas y el colectivo
+=======
+            // Crear instancias de las tarjetas y el colectivo
+>>>>>>> limitacion_FC
             FranquiciaCompleta tarjetaFC = new FranquiciaCompleta(0); // Saldo inicial 0
             MedioBoleto tarjetaMB = new MedioBoleto(2000); // Saldo inicial 2000
             Colectivo colectivo = new Colectivo();
@@ -18,6 +22,7 @@ namespace TpTarjeta
             Console.WriteLine("\n--- Prueba de Franquicia Completa ---");
             try
             {
+<<<<<<< HEAD
                 // Realiza primer viaje gratuito
                 tarjetaFC.RealizarViaje();
                 Console.WriteLine("Primer viaje gratuito realizado con Franquicia Completa.");
@@ -27,6 +32,17 @@ namespace TpTarjeta
                 Console.WriteLine("Segundo viaje gratuito realizado con Franquicia Completa.");
 
                 // Intenta tercer viaje (debe fallar, si no, tiene saldo)
+=======
+                // Realizar primer viaje gratuito
+                tarjetaFC.RealizarViaje();
+                Console.WriteLine("Primer viaje gratuito realizado con Franquicia Completa.");
+
+                // Realizar segundo viaje gratuito
+                tarjetaFC.RealizarViaje();
+                Console.WriteLine("Segundo viaje gratuito realizado con Franquicia Completa.");
+
+                // Intentar tercer viaje (debe fallar)
+>>>>>>> limitacion_FC
                 tarjetaFC.RealizarViaje();
                 Console.WriteLine("Tercer viaje realizado (no debería ser gratuito).");
             }
@@ -38,6 +54,7 @@ namespace TpTarjeta
             // Verifica el saldo después del pago
             Console.WriteLine($"Saldo Franquicia Completa: {tarjetaFC.ObtenerSaldo()}");
 
+<<<<<<< HEAD
             // Crea boleto para Franquicia Completa
             Boleto boletoFC = new Boleto(tarjetaFC.GetType().Name, "102 144", tarjetaFC.ObtenerUltimoPago(), tarjetaFC.ObtenerSaldo(), tarjetaFC.ObtenerID(), false);
             boletoFC.MostrarBoleto();
@@ -46,6 +63,56 @@ namespace TpTarjeta
             try
             {
                 tarjetaFC.RecargarSaldo(50000); // Intentamos recargar más del límite
+=======
+            // Intentar pagar con Medio Boleto
+            Console.WriteLine("\n--- Prueba de Medio Boleto ---");
+            try
+            {
+                decimal saldoAntes = tarjetaMB.ObtenerSaldo();
+                colectivo.PagarCon(tarjetaMB); // Realizamos un pago
+                decimal saldoDespues = tarjetaMB.ObtenerSaldo();
+                Console.WriteLine($"Pago realizado con Medio Boleto. Saldo antes: {saldoAntes}, saldo después: {saldoDespues}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al pagar con Medio Boleto: " + ex.Message);
+            }
+
+            // Verificar saldo después del pago
+            Console.WriteLine($"Saldo Medio Boleto: {tarjetaMB.ObtenerSaldo()}");
+
+            // Intentar pagar nuevamente antes de 5 minutos (esto debería fallar)
+            try
+            {
+                Console.WriteLine("Intentando realizar otro pago con Medio Boleto antes de 5 minutos...");
+                colectivo.PagarCon(tarjetaMB); // Intentamos otro pago antes de que pasen 5 minutos
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al intentar pagar nuevamente con Medio Boleto: " + ex.Message);
+            }
+
+            // Esperar 5 segundos (en lugar de 5 minutos)
+            Console.WriteLine("Esperando 5 segundos para probar otro pago...");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(5));
+
+            // Intentar pagar nuevamente después de 5 segundos
+            try
+            {
+                Console.WriteLine("Intentando realizar otro pago con Medio Boleto después de 5 segundos...");
+                colectivo.PagarCon(tarjetaMB); // Intentamos otro pago después de esperar
+                Console.WriteLine("Pago realizado con éxito después de 5 segundos.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al intentar pagar con Medio Boleto después de 5 segundos: " + ex.Message);
+            }
+
+            // Probar la recarga de saldo en Medio Boleto
+            try
+            {
+                tarjetaMB.RecargarSaldo(3000); // Recargamos saldo
+>>>>>>> limitacion_FC
                 Console.WriteLine($"Recarga realizada. Nuevo saldo Medio Boleto: {tarjetaMB.ObtenerSaldo()}");
             }
             catch (Exception ex)
