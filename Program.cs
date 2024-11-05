@@ -92,6 +92,7 @@ namespace TpTarjeta
                 Console.WriteLine("Error al intentar pagar nuevamente con Medio Boleto: " + ex.Message);
             }
 
+<<<<<<< HEAD
             // Esperar 5 segundos (en lugar de 5 minutos)
             Console.WriteLine("Esperando 5 segundos para probar otro pago...");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(5));
@@ -106,6 +107,22 @@ namespace TpTarjeta
             catch (Exception ex)
             {
                 Console.WriteLine("Error al intentar pagar con Medio Boleto después de 5 segundos: " + ex.Message);
+=======
+            // Esperar 5 minutos (en realidad espera 5 segundos para no alargar el tiempo de ejecución)
+            Console.WriteLine("Esperando 5 minutos para probar otro pago...");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(5));
+
+            // Intentar pagar nuevamente después de 5 minutos
+            try
+            {
+                Console.WriteLine("Intentando realizar otro pago con Medio Boleto después de 5 minutos...");
+                colectivo.PagarCon(tarjetaMB); // Intentamos otro pago después de esperar 5 minutos
+                Console.WriteLine("Pago realizado con éxito después de 5 minutos.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al intentar pagar con Medio Boleto después de 5 minutos: " + ex.Message);
+>>>>>>> limitacion_MB
             }
 
             // Probar la recarga de saldo en Medio Boleto
