@@ -5,36 +5,33 @@ namespace TpTarjeta.Tests
 {
     public class MedioBoletoTests
     {
+        Tiempo tiempo;
+
         [SetUp]
         public void Setup()
         {
-            // Inicializa objetos comunes para todas las pruebas aquí, si lo necesitas.
+            tiempo = new Tiempo(10, 0);
         }
 
         [Test]
-        public void PagoConMedioBoleto_MontoEsMitadDelNormal()
+        public void MontoEsMitadDelNormal()
         {
-            // Arrange
-            var tiempoInicial = new Tiempo(10, 0); // Tiempo inicial para el viaje
-            var tarjeta = new MedioBoleto(1200, tiempoInicial); // Tarjeta medio boleto con saldo suficiente
+            var tarjeta = new MedioBoleto(1200, tiempo); 
 
-            // Act
-            tarjeta.DebitarSaldo(tiempoInicial); // Debitamos el monto de medio boleto
-            var ultimoPagoMedioBoleto = tarjeta.ObtenerUltimoPago(); // Obtenemos el último pago
+            tarjeta.DebitarSaldo(tiempo); 
+            var ultimoPagoMedioBoleto = tarjeta.ObtenerUltimoPago();
 
-            // Assert
             Assert.That(ultimoPagoMedioBoleto, Is.EqualTo(600m), "El monto del medio boleto debería ser 470.");
             Console.WriteLine("El monto del medio boleto es correctamente 470.");
         }
 
         [Test]
-        public void PagoConMedioBoleto_SiRealizaViajeAntesDe5Minutos_LanzaExcepcion()
+        public void ViajeAntesDe5Minutos_LanzaExcepcion()
         {
-            var tiempoInicial = new Tiempo(10, 0); // Tiempo inicial para el viaje
-            var tarjeta = new MedioBoleto(1000, tiempoInicial); // Tarjeta medio boleto
-            tarjeta.DebitarSaldo(tiempoInicial); // Realiza el primer viaje
+            var tarjeta = new MedioBoleto(1000, tiempo); 
+            tarjeta.DebitarSaldo(tiempo); 
 
-            var tiempoAntesDe5Min = new Tiempo(10, 3); // Tiempo 3 minutos después
+            var tiempoAntesDe5Min = new Tiempo(10, 3); 
 
             Assert.That(() => tarjeta.DebitarSaldo(tiempoAntesDe5Min), Throws.InvalidOperationException, "Se esperaba una excepción al intentar realizar otro viaje antes de 5 minutos.");
             Console.WriteLine("No se puede realizar otro viaje en menos de 5 minutos con la misma tarjeta medio boleto.");
@@ -42,34 +39,31 @@ namespace TpTarjeta.Tests
 
 
         [Test]
-        public void PagoConMedioBoleto_MasDeCuatroViajes_LanzaExcepcion()
+        public void MasDeCuatroViajes_LanzaExcepcion()
         {
-            var tiempo = new Tiempo(10, 0); // Tiempo inicial para el primer viaje
-            var tarjeta = new MedioBoleto(3000, tiempo); // Tarjeta medio boleto
+            var tarjeta = new MedioBoleto(3000, tiempo); 
 
             tarjeta.DebitarSaldo(new Tiempo(tiempo.ObtenerHoras(), tiempo.ObtenerMinutos())); // 1er viaje
-            tiempo.SumarMinutos(5); // 5 minutos después
+            tiempo.SumarMinutos(5); 
 
             tarjeta.DebitarSaldo(new Tiempo(tiempo.ObtenerHoras(), tiempo.ObtenerMinutos())); // 2do viaje
-            tiempo.SumarMinutos(5); // 5 minutos después
+            tiempo.SumarMinutos(5); 
 
             tarjeta.DebitarSaldo(new Tiempo(tiempo.ObtenerHoras(), tiempo.ObtenerMinutos())); // 3er viaje
-            tiempo.SumarMinutos(5); // 5 minutos después
+            tiempo.SumarMinutos(5); 
 
             tarjeta.DebitarSaldo(new Tiempo(tiempo.ObtenerHoras(), tiempo.ObtenerMinutos())); // 4to viaje
 
-            tiempo.SumarMinutos(5); // 5 minutos después para intentar un quinto viaje
+            tiempo.SumarMinutos(5); 
             Assert.That(() => tarjeta.DebitarSaldo(new Tiempo(tiempo.ObtenerHoras(), tiempo.ObtenerMinutos())), Throws.InvalidOperationException, "Se esperaba una excepción al intentar realizar un quinto viaje con medio boleto.");
             Console.WriteLine("No se puede realizar más de cuatro viajes en un día con la tarjeta medio boleto.");
         }
 
         [Test]
-        public void TestMedioBoleto_ViajeFueraDeHorario()
+        public void ViajeFueraDeHorario()
         {
-            // Arrange
-            var tarjeta = new MedioBoleto(1000m, new Tiempo(10, 0)); // Inicializa a las 10:00
+            var tarjeta = new MedioBoleto(1000m, tiempo);
 
-            // Act & Assert
             Assert.Throws<InvalidOperationException>(() => tarjeta.DebitarSaldo(new Tiempo(5, 59))); // 23:00
             Assert.Throws<InvalidOperationException>(() => tarjeta.DebitarSaldo(new Tiempo(22, 30))); // 22:30
         }

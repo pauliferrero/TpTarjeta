@@ -4,100 +4,60 @@ using TpTarjeta;
 namespace TpTarjeta.Tests
 {
     [TestFixture]
-    internal class FranquiciaCompletaTests
+    public class FranquiciaCompletaTests
     {
-        [Test]
-        public void FranquiciaCompleta_PuedePagarBoleto()
+        Tiempo tiempo;
+        Colectivo colectivo;
+
+        [SetUp]
+        public void Setup()
         {
-            // Arrange
-            var tiempo = new Tiempo(10, 0);
-            var tarjeta = new FranquiciaCompleta(0, tiempo);
-            var colectivo = new Colectivo();
-
-            // Act
-            try
-            {
-                colectivo.PagarCon(tarjeta, tiempo);
-                Console.WriteLine("La tarjeta de Franquicia Completa pudo pagar el boleto.");
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail($"La tarjeta de Franquicia Completa no pudo pagar el boleto: {ex.Message}");
-            }
-
-            // Assert (opcional)
-            Assert.IsTrue(true); // Siempre pasa para indicar que no hubo excepciones
+            tiempo = new Tiempo(10, 0);
+            colectivo = new Colectivo();
         }
 
-        
+        [Test]
+        public void PuedePagarBoleto()
+        {
+            var tarjeta = new FranquiciaCompleta(0, tiempo);
+
+            Assert.That(() => colectivo.PagarCon(tarjeta, tiempo), Throws.Nothing, "La tarjeta de Franquicia Completa no pudo pagar el boleto.");
+        }
 
         [Test]
-        public void FranquiciaCompleta_CobraViajeCuandoSeSuperaLimiteGratuito()
+        public void CobraViajeCuandoSeSuperaLimiteGratuito()
         {
-            // Arrange
-            var tiempo = new Tiempo(10, 0);
             var tarjeta = new FranquiciaCompleta(1200, tiempo); // Suficiente saldo para cubrir tarifas
-            var colectivo = new Colectivo();
 
-            // Act
             colectivo.PagarCon(tarjeta, tiempo); // 1er viaje gratuito
-            tiempo.SumarMinutos(5); // 5 minutos después
+            tiempo.SumarMinutos(5); 
             colectivo.PagarCon(tarjeta, tiempo); // 2do viaje gratuito
-
-            // Intentar un tercer viaje, que debería cobrarse
-            tiempo.SumarMinutos(5); // 5 minutos después para intentar un tercer viaje
+            tiempo.SumarMinutos(5); 
 
             Assert.DoesNotThrow(() => colectivo.PagarCon(tarjeta, tiempo), "Se esperaba que no se lanzara una excepción al intentar realizar un tercer viaje.");
-
-            // Verifica que el saldo se haya debitado correctamente después del tercer viaje
             Assert.That(tarjeta.ObtenerSaldo(), Is.EqualTo(1200 - 1200), "El saldo no se debió debitar correctamente después del tercer viaje.");
         }
 
         [Test]
-        public void FranquiciaCompleta_NoPermiteMasDeDosViajesGratuitosPorDia()
+        public void NoMasDeDosViajesGratuitosPorDia()
         {
-            // Arrange
-            var tiempo = new Tiempo(10, 0);
             var tarjeta = new FranquiciaCompleta(10, tiempo); // Suficiente saldo para cubrir un viaje
-            var colectivo = new Colectivo();
 
-            // Act
-            Console.WriteLine("Iniciando test de límite de dos viajes gratuitos por día.");
-            Console.WriteLine($"Tiempo actual: {tiempo.ObtenerTiempoActual()}");
-
-            // Intentar el primer viaje gratuito
-            Console.WriteLine("Intentando el primer viaje gratuito...");
             tarjeta.RealizarViaje(tiempo);
-            Console.WriteLine($"Saldo después del primer viaje: {tarjeta.ObtenerSaldo()}");
-
-            // Intentar el segundo viaje gratuito
-            tiempo.SumarMinutos(5); // 5 minutos después
-            Console.WriteLine($"Tiempo actual: {tiempo.ObtenerTiempoActual()}");
-            Console.WriteLine("Intentando el segundo viaje gratuito...");
+            tiempo.SumarMinutos(5); 
             tarjeta.RealizarViaje(tiempo);
-            Console.WriteLine($"Saldo después del segundo viaje: {tarjeta.ObtenerSaldo()}");
+            tiempo.SumarMinutos(5); 
 
-            // Intentar un tercer viaje, que debería lanzar una excepción
-            tiempo.SumarMinutos(5); // 5 minutos después para intentar un tercer viaje
-            Console.WriteLine($"Tiempo actual: {tiempo.ObtenerTiempoActual()}");
-            Console.WriteLine("Intentando el tercer viaje, que debería lanzar una excepción...");
-
-            Assert.Throws<InvalidOperationException>(() => tarjeta.RealizarViaje(tiempo),
-                "Se esperaba una excepción al intentar realizar un tercer viaje gratuito.");
+            Assert.Throws<InvalidOperationException>(() => tarjeta.RealizarViaje(tiempo), "Se esperaba una excepción al intentar realizar un tercer viaje gratuito.");
         }
 
         [Test]
-        public void TestFranquiciaCompleta_ViajeFueraDeHorario()
+        public void ViajeFueraDeHorario()
         {
-            // Arrange
-            var tarjeta = new FranquiciaCompleta(1000m, new Tiempo(10, 0)); // Inicializa a las 10:00
+            var tarjeta = new FranquiciaCompleta(1000m, tiempo); 
 
-            // Act & Assert
             Assert.Throws<InvalidOperationException>(() => tarjeta.DebitarSaldo(new Tiempo(5, 0))); // 05:00
             Assert.Throws<InvalidOperationException>(() => tarjeta.DebitarSaldo(new Tiempo(22, 30))); // 22:30
         }
-
-
     }
-
 }
