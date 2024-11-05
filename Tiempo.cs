@@ -9,7 +9,6 @@ namespace TpTarjeta
 
         public Tiempo(int horasIniciales, int minutosIniciales)
         {
-            // Inicializa con horas y minutos específicos
             horas = horasIniciales % 24; // Asegura que las horas estén entre 0 y 23
             minutos = minutosIniciales % 60; // Asegura que los minutos estén entre 0 y 59
         }
@@ -34,14 +33,11 @@ namespace TpTarjeta
             return Math.Abs(totalMinutosActual - totalMinutosOtro) >= minutosRequeridos;
         }
 
-
-        // Método para obtener la hora actual en formato HH:MM
         public string ObtenerTiempoActual()
         {
             return $"{horas:D2}:{minutos:D2}";
         }
 
-        // Método para sumar minutos (maneja el ajuste de horas y minutos)
         public void SumarMinutos(int cantidadMinutos)
         {
             minutos += cantidadMinutos;
@@ -50,7 +46,11 @@ namespace TpTarjeta
                 minutos -= 60;
                 horas++;
             }
-            horas %= 24; // Asegura que las horas estén entre 0 y 23
+            horas %= 24; 
+        }
+        public void SumarHoras(int cantidadHoras)
+        {
+            horas = (horas + cantidadHoras) % 24;
         }
 
         public void Sumar(Tiempo otroTiempo)
@@ -66,13 +66,6 @@ namespace TpTarjeta
             }
         }
 
-        // Método para sumar horas (sin afectar los minutos)
-        public void SumarHoras(int cantidadHoras)
-        {
-            horas = (horas + cantidadHoras) % 24; // Asegura que las horas estén entre 0 y 23
-        }
-
-        // Método para sumar 5 minutos directamente
         public void SumarCincoMinutos()
         {
             SumarMinutos(5);
