@@ -1,0 +1,14 @@
+C:\Users\AdminDellAIO\source\repos\TpTarjeta\TpTarjeta\obj\Debug\net6.0\TpTarjeta.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\AdminDellAIO\source\repos\TpTarjeta\TpTarjeta\obj\Debug\net6.0\TpTarjeta.AssemblyInfoInputs.cache
+C:\Users\AdminDellAIO\source\repos\TpTarjeta\TpTarjeta\obj\Debug\net6.0\TpTarjeta.AssemblyInfo.cs
+C:\Users\AdminDellAIO\source\repos\TpTarjeta\TpTarjeta\obj\Debug\net6.0\TpTarjeta.csproj.CoreCompileInputs.cache
+C:\Users\AdminDellAIO\source\repos\TpTarjeta\TpTarjeta\bin\Debug\net6.0\TpTarjeta.exe
+C:\Users\AdminDellAIO\source\repos\TpTarjeta\TpTarjeta\bin\Debug\net6.0\TpTarjeta.deps.json
+C:\Users\AdminDellAIO\source\repos\TpTarjeta\TpTarjeta\bin\Debug\net6.0\TpTarjeta.runtimeconfig.json
+C:\Users\AdminDellAIO\source\repos\TpTarjeta\TpTarjeta\bin\Debug\net6.0\TpTarjeta.dll
+C:\Users\AdminDellAIO\source\repos\TpTarjeta\TpTarjeta\bin\Debug\net6.0\TpTarjeta.pdb
+C:\Users\AdminDellAIO\source\repos\TpTarjeta\TpTarjeta\obj\Debug\net6.0\TpTarjeta.dll
+C:\Users\AdminDellAIO\source\repos\TpTarjeta\TpTarjeta\obj\Debug\net6.0\refint\TpTarjeta.dll
+C:\Users\AdminDellAIO\source\repos\TpTarjeta\TpTarjeta\obj\Debug\net6.0\TpTarjeta.pdb
+C:\Users\AdminDellAIO\source\repos\TpTarjeta\TpTarjeta\obj\Debug\net6.0\TpTarjeta.genruntimeconfig.cache
+C:\Users\AdminDellAIO\source\repos\TpTarjeta\TpTarjeta\obj\Debug\net6.0\ref\TpTarjeta.dll
